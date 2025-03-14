@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { useSession } from "next-auth/react";
 import { useRouter, useParams } from "next/navigation";
 import PromptCard from "@/components/PromptCard";
-import LoadingSpinner from "@/components/LoadingSpinner";
+import SkeletonCard from "@/components/SkeletonCard";
 
 const MyProfile = () => {
   const { data: session } = useSession();
@@ -78,17 +78,19 @@ const MyProfile = () => {
       </p>
 
       {isLoading ? (
-        <div className="mt-10 flex-center">
-          <LoadingSpinner />
+        <div className="mt-16 prompt_layout">
+          {[1, 2, 3, 4, 5, 6].map((item) => (
+            <SkeletonCard key={item} />
+          ))}
         </div>
       ) : (
-        <div className="mt-10 prompt_layout">
+        <div className="mt-16 prompt_layout">
           {posts.map((post) => (
             <PromptCard
               key={post._id}
               post={post}
-              handleEdit={handleEdit}
-              handleDelete={handleDelete}
+              handleEdit={() => handleEdit(post)}
+              handleDelete={() => handleDelete(post)}
             />
           ))}
         </div>
