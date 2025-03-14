@@ -1,13 +1,13 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useSession } from "next-auth/react";
-import { useRouter } from "next/navigation";
+import { useRouter, useParams } from "next/navigation";
 
 import Profile from "@components/Profile";
 
 const MyProfile = () => {
-  const { data: session } = useSession();
+  const params = useParams();
+  const userId = params.id;
 
   const [posts, setPosts] = useState([]);
 
@@ -15,14 +15,14 @@ const MyProfile = () => {
 
   useEffect(() => {
     const fetchPosts = async () => {
-      const response = await fetch(`/api/users/${session?.user.id}/posts`);
+      const response = await fetch(`/api/users/${userId}/posts`);
       const data = await response.json();
 
       setPosts(data);
     };
 
-    if (session?.user.id) fetchPosts();
-  }, []);
+    if (userId) fetchPosts();
+  }, [userId]);
 
   const handleEdit = (post) => {
     router.push(`/update-prompt/?id=${post._id}`);
@@ -55,8 +55,7 @@ const MyProfile = () => {
 
   return (
     <Profile
-      name="My"
-      desc="Welcome to your personalized profile page"
+      userId={userId}
       data={posts}
       handleEdit={handleEdit}
       handleDelete={handleDelete}
