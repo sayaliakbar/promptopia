@@ -33,7 +33,7 @@ const Nav = () => {
         <p className="logo_text">Promptopia</p>
       </Link>
 
-      {/* Mobile Navigation */}
+      {/* Desktop Navigation */}
       <div className="sm:flex hidden">
         {session?.user ? (
           <div className="flex gap-3 md:gap-5">
@@ -44,7 +44,7 @@ const Nav = () => {
               SignOut
             </button>
 
-            <Link href="/profile">
+            <Link href={`/profile/${session?.user.id}`}>
               <Image
                 src={session?.user.image}
                 alt="User Profile"
@@ -85,7 +85,7 @@ const Nav = () => {
             {toggleDropDown && (
               <div className="dropdown">
                 <Link
-                  href="/profile"
+                  href={`/profile/${session?.user.id}`}
                   className="dropdown_link"
                   onClick={() => setToggleDropDown(false)}
                 >
