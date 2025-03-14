@@ -1,6 +1,20 @@
-import Link from "next/link";
+"use client";
+
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import LoadingSpinner from "./LoadingSpinner";
 
 const Form = ({ type, post, setPost, submitting, handleSubmit }) => {
+  const [isSubmitting, setIsSubmitting] = useState(submitting);
+  const router = useRouter();
+
+  const handleFormSubmit = async (e) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    await handleSubmit(e);
+    setIsSubmitting(false);
+  };
+
   return (
     <section className="w-full max-w-full flex-start flex-col">
       <h1 className="head_text text-left">
@@ -12,7 +26,7 @@ const Form = ({ type, post, setPost, submitting, handleSubmit }) => {
       </p>
 
       <form
-        onSubmit={handleSubmit}
+        onSubmit={handleFormSubmit}
         className="mt-10 w-full max-w-2xl flex flex-col gap-7 glassmorphism"
       >
         <label htmlFor={type === "Create" ? "write-prompt" : "edit-prompt"}>
@@ -48,15 +62,28 @@ const Form = ({ type, post, setPost, submitting, handleSubmit }) => {
         </label>
 
         <div className="flex-end mx-3 mb-5 gap-4">
-          <Link href="/" className="text-gray-500 text-sm ">
+          <button
+            type="button"
+            onClick={() => router.back()}
+            className="text-gray-500 text-sm"
+            disabled={isSubmitting}
+          >
             Cancel
-          </Link>
+          </button>
+
           <button
             type="submit"
-            disabled={submitting}
+            disabled={isSubmitting}
             className="px-5 py-1.5 text-sm bg-primary-orange rounded-full text-white"
           >
-            {submitting ? `${type}ing...` : type}
+            {isSubmitting ? (
+              <div className="flex items-center justify-center">
+                <LoadingSpinner />
+                <span className="ml-2">Submitting...</span>
+              </div>
+            ) : (
+              type
+            )}
           </button>
         </div>
       </form>
