@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import LoadingSpinner from "./LoadingSpinner";
 
 const Form = ({ type, post, setPost, submitting, handleSubmit }) => {
   const [isSubmitting, setIsSubmitting] = useState(submitting);
@@ -76,14 +75,7 @@ const Form = ({ type, post, setPost, submitting, handleSubmit }) => {
             disabled={isSubmitting}
             className="px-5 py-1.5 text-sm bg-primary-orange rounded-full text-white"
           >
-            {isSubmitting ? (
-              <div className="flex items-center justify-center">
-                <LoadingSpinner />
-                <span className="ml-2">Submitting...</span>
-              </div>
-            ) : (
-              type
-            )}
+            {isSubmitting ? <span className="">Editing...</span> : type}
           </button>
         </div>
       </form>
