@@ -1,6 +1,8 @@
+import { Suspense } from "react";
 import Feed from "@/components/Feed";
+import LoadingSpinner from "@/components/LoadingSpinner";
 
-const Home = () => {
+export default function Home() {
   return (
     <section className="w-full flex-center flex-col">
       <h1 className="head_text text-center">
@@ -13,9 +15,9 @@ const Home = () => {
         discover, create and share creative prompts
       </p>
 
-      <Feed />
+      <Suspense fallback={<LoadingSpinner />}>
+        <Feed />
+      </Suspense>
     </section>
   );
-};
-
-export default Home;
+}
