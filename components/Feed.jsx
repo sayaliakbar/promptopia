@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 
 import PromptCard from "./PromptCard";
+import SkeletonCard from "./SkeletonCard";
 
 const PromptCardList = ({ data, handleTagClick }) => {
   return (
@@ -20,6 +21,7 @@ const PromptCardList = ({ data, handleTagClick }) => {
 
 const Feed = () => {
   const [allPosts, setAllPosts] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   // Search states
   const [searchText, setSearchText] = useState("");
@@ -27,10 +29,16 @@ const Feed = () => {
   const [searchedResults, setSearchedResults] = useState([]);
 
   const fetchPosts = async () => {
-    const response = await fetch("/api/prompt");
-    const data = await response.json();
-
-    setAllPosts(data);
+    setIsLoading(true);
+    try {
+      const response = await fetch("/api/prompt");
+      const data = await response.json();
+      setAllPosts(data);
+    } catch (error) {
+      console.error("Error fetching posts:", error);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   useEffect(() => {
@@ -83,14 +91,23 @@ const Feed = () => {
         />
       </form>
 
-      {/* All Prompts */}
-      {searchText ? (
-        <PromptCardList
-          data={searchedResults}
-          handleTagClick={handleTagClick}
-        />
+      {isLoading ? (
+        <div className="mt-16 prompt_layout">
+          {[1, 2, 3, 4, 5, 6].map((item) => (
+            <SkeletonCard key={item} />
+          ))}
+        </div>
       ) : (
-        <PromptCardList data={allPosts} handleTagClick={handleTagClick} />
+        <>
+          {searchText ? (
+            <PromptCardList
+              data={searchedResults}
+              handleTagClick={handleTagClick}
+            />
+          ) : (
+            <PromptCardList data={allPosts} handleTagClick={handleTagClick} />
+          )}
+        </>
       )}
     </section>
   );
