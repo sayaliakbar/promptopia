@@ -251,4 +251,6 @@ A: Run `npm run build && npm start` to ensure you're using the latest build. Cle
 
 ---
 
-Built with ❤️ by Ali Akbar - Feel free to contact me for any questions or feedback!
+<div align="center">
+  <sub>Built with ❤️ by Ali Akbar - Feel free to contact me for any questions or feedback!</sub>
+</div>
